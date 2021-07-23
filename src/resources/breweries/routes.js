@@ -2,7 +2,7 @@ const express = require("express");
 
 const breweriesRouter = express.Router();
 
-const breweriesDB = [
+let breweriesDB = [
   {
     id: 9094,
     obdb_id: "bnaf-llc-austin",
@@ -450,7 +450,7 @@ breweriesRouter.delete("/:id", (req, res) => {
 
 //Patch
 // change the keys with their updated version, keeping the ones that dont change
-breweriesRouter.patch("/id", (req, res) => {
+breweriesRouter.patch("/:id", (req, res) => {
   // //code for if the responseBrewery will never be null
   //   let { id } = req.params;
   //   id = Number(id);
@@ -477,8 +477,8 @@ breweriesRouter.patch("/id", (req, res) => {
   const brewery = breweriesDB.find(brewery => brewery.id === id);
   let responseBrewery = null;
 
+  const updatedBrewery = req.body;
   if (brewery) {
-    const updatedBrewery = req.body;
     breweriesDB = breweriesDB.map(brewery => {
       if (brewery.id === id) {
         responseBrewery = { ...brewery, ...updatedBrewery };
@@ -491,7 +491,7 @@ breweriesRouter.patch("/id", (req, res) => {
     responseBrewery = "Couldn't find brewery to update";
   }
 
-  res.json(updatedBrewery, responseBrewery);
+  res.json({ updatedBrewery, responseBrewery });
 });
 
 module.exports = breweriesRouter;
